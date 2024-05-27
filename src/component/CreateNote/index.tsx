@@ -32,7 +32,7 @@ import weekOfYear from 'dayjs/plugin/isoWeek';
 import quarterOfYear from 'dayjs/plugin/quarterOfYear';
 import updateLocale from 'dayjs/plugin/updateLocale';
 import { useDocumentEvent } from '../../hooks/useDocumentEvent';
-import {SolarDay, LegalHoliday} from 'tyme4ts';
+import {SolarDay} from 'tyme4ts';
 
 
 
@@ -124,37 +124,34 @@ export const CreateNote = (props: { width: number }) => {
     let badgeText: string;
     const locale = window.localStorage.getItem('language') || 'en';
     const date = dayjs(value.format()).locale(locale);
-	let lunarDayText = '';
-	let dayWorkStatus = '';
-	let festevial = '';
-	let solarTerm = '';
+    let lunarDayText = '';
+    let dayWorkStatus = '';
     switch (picker) {
       case 'date':
-	    // 获取农历
-	    const solar = SolarDay.fromYmd(date.year(), date.month() + 1, date.date());
-	    console.log(solar.toString());
-	    console.log(solar.getLunarDay().toString());
-	    const lunarDay = solar.getLunarDay().toString().split('年')[1]
-	    const lunarDayArr = lunarDay.split('月')
-		if (lunarDayArr[1] 	!= "初一") {
-		  lunarDayText = `${lunarDayArr[1]}`;
-		 } else {
-		  lunarDayText = `${lunarDayArr[0]}月`;
-		}
-	    // 调休检测
-	    const  holiday = LegalHoliday.fromYmd(date.year(), date.month() + 1, date.date());
-	    switch (holiday?.isWork()) {
-		  case true:
-			  dayWorkStatus = '班'
-			  break;
-		  case false:
-			  dayWorkStatus = '休'
-			  break;
-		  case undefined:
-			  break;
-		}
-		// 节日检测
-	    // 节气检测
+        if (settings?.chineseCalendar) {
+          const solar = SolarDay.fromYmd(date.year(), date.month() + 1, date.date());
+
+          // 获取农历
+          const lunarDay = solar.getLunarDay().toString().split('年')[1]
+          if (lunarDay.split('月')[1] != "初一") {
+              lunarDayText = lunarDay.slice(2, 4);
+          } else {
+              lunarDayText = lunarDay.slice(0, 2);
+          }
+          // 调休检测
+          const  holiday = solar.getLegalHoliday();
+          switch (holiday?.isWork()) {
+              case true:
+                  dayWorkStatus = '班'
+                  break;
+              case false:
+                  dayWorkStatus = '休'
+                  break;
+          }
+          // 节气检测-优先级高于农历
+          // 节日检测-优先级高于节气
+
+          }
 	    
         formattedDate = date.format('YYYY-MM-DD');
         badgeText = `${date.date()}`;
@@ -183,10 +180,11 @@ export const CreateNote = (props: { width: number }) => {
     if (existsDates.includes(formattedDate)) {
       if (picker !== 'week') {
         return (
-          <div className="ant-picker-cell-inner">
+          <div className="ant-picker-cell-inner vertical-spans container">
             <div className="cell-container">
               <span className="dot">.</span>
               <span>{badgeText}</span>
+              <span>{lunarDayText}</span>
             </div>
           </div>
         );
@@ -194,7 +192,7 @@ export const CreateNote = (props: { width: number }) => {
 
       if (date.day() === 1) {
         return (
-          <div className="ant-picker-cell-inner">
+          <div className="ant-picker-cell-inner vertical-spans">
             <div className="cell-container">
               <span className="week-dot">.</span>
               <span>{badgeText}</span>
