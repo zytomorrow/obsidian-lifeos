@@ -9,12 +9,16 @@
   .cell-container {
     position: relative;
     .dot {
-      position: absolute;
-      left: 0;
+      position: relative;
+      left: -2px;
+      color: #39c56a;
+      display: inline; /* 将span元素设置为行内元素 */
     }
     .week-dot {
       position: fixed;
       left: 25px;
+      color: #39c56a;
+      display: inline; /* 将span元素设置为行内元素 */
     }
   }
 
@@ -40,7 +44,7 @@
       display: flex;
       justify-content: center;
       position: relative;
-      inset: -40px auto auto 0px !important;
+      inset: -40px auto auto 0 !important;
 
       .ant-picker-panel-container {
         border-radius: 0;
@@ -66,43 +70,38 @@
     }
   }
 
-	.vertical-spans span {
-		display: block;
-		position: relative;
-		z-index: 2;
-	}
+  .container {
+    position: relative;
+    z-index: 2;
+  }
 
-	.container {
-		position: relative;
-		z-index: 2;
-	}
+  .worklabel {
+    position: absolute;
+    top: 0;
+    left: 24px;
+    color: #fff;
+    background-color: #4E5877;
+    padding: 1px 2px;
+    line-height: 14px;
+    border-radius: 0.4rem;
+    font-size: 10px;
+    z-index: 1;
+    height: auto;
 
-	.worklabel {
-		position: absolute;
-		top: 0;
-		left: 24px;
-		color: #fff;
-		background-color: #4E5877;
-		padding: 1px 2px;
-		line-height: 14px;
-		border-radius: 0.4rem;
-		font-size: 10px;
-		z-index: 1;
-
-	}
-	.restlabel {
-		position: absolute;
-		top: 0;
-		left: 24px;
-		color: #fff;
-		background-color: #eb3333;
-		padding: 1px 2px;
-		line-height: 14px;
-		border-radius: 0.4rem;
-		font-size: 10px;
-		z-index: 1;
-
-	}
+  }
+  .restlabel {
+    position: absolute;
+    top: 0;
+    left: 24px;
+    color: #fff;
+    background-color: #eb3333;
+    padding: 1px 2px;
+    line-height: 14px;
+    border-radius: 0.4rem;
+    font-size: 10px;
+    z-index: 1;
+    height: auto;
+  }
 
 }
 
