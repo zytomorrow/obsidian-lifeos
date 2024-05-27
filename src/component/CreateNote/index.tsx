@@ -32,6 +32,9 @@ import weekOfYear from 'dayjs/plugin/isoWeek';
 import quarterOfYear from 'dayjs/plugin/quarterOfYear';
 import updateLocale from 'dayjs/plugin/updateLocale';
 import { useDocumentEvent } from '../../hooks/useDocumentEvent';
+import {SolarDay, LegalHoliday} from 'tyme4ts';
+
+
 
 dayjs.extend(weekOfYear);
 dayjs.extend(quarterOfYear);
@@ -121,9 +124,38 @@ export const CreateNote = (props: { width: number }) => {
     let badgeText: string;
     const locale = window.localStorage.getItem('language') || 'en';
     const date = dayjs(value.format()).locale(locale);
-
+	let lunarDayText = '';
+	let dayWorkStatus = '';
+	let festevial = '';
+	let solarTerm = '';
     switch (picker) {
       case 'date':
+	    // 获取农历
+	    const solar = SolarDay.fromYmd(date.year(), date.month() + 1, date.date());
+	    console.log(solar.toString());
+	    console.log(solar.getLunarDay().toString());
+	    const lunarDay = solar.getLunarDay().toString().split('年')[1]
+	    const lunarDayArr = lunarDay.split('月')
+		if (lunarDayArr[1] 	!= "初一") {
+		  lunarDayText = `${lunarDayArr[1]}`;
+		 } else {
+		  lunarDayText = `${lunarDayArr[0]}月`;
+		}
+	    // 调休检测
+	    const  holiday = LegalHoliday.fromYmd(date.year(), date.month() + 1, date.date());
+	    switch (holiday?.isWork()) {
+		  case true:
+			  dayWorkStatus = '班'
+			  break;
+		  case false:
+			  dayWorkStatus = '休'
+			  break;
+		  case undefined:
+			  break;
+		}
+		// 节日检测
+	    // 节气检测
+	    
         formattedDate = date.format('YYYY-MM-DD');
         badgeText = `${date.date()}`;
         break;
@@ -171,7 +203,31 @@ export const CreateNote = (props: { width: number }) => {
         );
       }
     }
-    return <div className="ant-picker-cell-inner">{badgeText}</div>;
+	if (picker === 'date') {
+		switch (dayWorkStatus){
+			case '休':
+				return (<div className="ant-picker-cell-inner vertical-spans container">
+					<div className="restlabel">{dayWorkStatus}</div>
+					<span>{badgeText}</span>
+					<span>{lunarDayText}</span>
+				</div>);
+			case '班':
+				return (<div className="ant-picker-cell-inner vertical-spans container">
+					<div className="worklabel">{dayWorkStatus}</div>
+					<span>{badgeText}</span>
+					<span>{lunarDayText}</span>
+				</div>);
+			case "":
+				return (<div className="ant-picker-cell-inner vertical-spans container">
+					<span>{badgeText}</span>
+					<span>{lunarDayText}</span>
+				</div>);
+			default:
+				return <div className="ant-picker-cell-inner">{badgeText}</div>;
+		}
+	} else {
+		return <div className="ant-picker-cell-inner">{badgeText}</div>;
+	}
   };
 
   const createPARAFile = async (values: any) => {
