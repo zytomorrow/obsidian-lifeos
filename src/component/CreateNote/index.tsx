@@ -139,7 +139,6 @@ export const CreateNote = (props: { width: number }) => {
             chineseCalendarText = lunarString.slice(0, 2);
           }
           // 调休检测
-
           const holiday = solar.getLegalHoliday();
           dayWorkStatus = holiday === null || holiday === undefined || typeof holiday.isWork !== 'function'
             ? ''
