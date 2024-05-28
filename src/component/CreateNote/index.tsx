@@ -139,15 +139,13 @@ export const CreateNote = (props: { width: number }) => {
             chineseCalendarText = lunarString.slice(0, 2);
           }
           // 调休检测
+
           const holiday = solar.getLegalHoliday();
-          switch (holiday?.isWork()) {
-            case true:
-              dayWorkStatus = '班'
-              break;
-            case false:
-              dayWorkStatus = '休'
-              break;
-          }
+          dayWorkStatus = holiday === null || holiday === undefined || typeof holiday.isWork !== 'function'
+            ? ''
+            : holiday.isWork()
+              ? '班'
+              : '休';
           // 节气检测-优先级高于农历
           const term = solar.getTerm();
           const termName = term.getName();
@@ -193,54 +191,31 @@ export const CreateNote = (props: { width: number }) => {
 
     if (existsDates.includes(formattedDate)) {
       if (picker === 'date') {
-        switch (dayWorkStatus) {
-          case '休':
-            return (
-              <div className="ant-picker-cell-inner container">
-                <div className="restlabel">{dayWorkStatus}</div>
-                <div className="cell-container">
-                  <span className="dot">•</span>
-                  <span>{badgeText}</span>
-                </div>
-                <div className="cell-container">
-                <span>{chineseCalendarText}</span>
-                </div>
-              </div>
-            );
-          case '班':
-            return (
-              <div className="ant-picker-cell-inner container">
-                <div className="worklabel">{dayWorkStatus}</div>
-                <div className="cell-container">
-                  <span className="dot">•</span>
-                  <span>{badgeText}</span>
-                </div>
-                <div className="cell-container">
-                <span>{chineseCalendarText}</span>
-                </div>
-              </div>
-            );
-          case "":
-            return (
-              <div className="ant-picker-cell-inner container">
-                <div>{dayWorkStatus}</div>
-                <div className="cell-container">
-                  <span className="dot">•</span>
-                  <span>{badgeText}</span>
-                </div>
-                <div className="cell-container">
-                <span>{chineseCalendarText}</span>
-                </div>
-              </div>
-            );
-          default:
-            return <div className="ant-picker-cell-inner">{badgeText}</div>;
-        }
+        return (
+          <div className="ant-picker-cell-inner">
+            <div className="cell-container">
+              <span className="dot">•</span>
+              <span>{badgeText}</span>
+              <span>{chineseCalendarText}</span>
+              <span
+                className={
+                  dayWorkStatus === "休"
+                    ? "restlabel"
+                    : dayWorkStatus === "班"
+                      ? "worklabel"
+                      : ""
+                }
+              >
+                {dayWorkStatus}
+              </span>
+            </div>
+          </div>
+        );
       }
       
       if (picker !== 'week') {
         return (
-          <div className="ant-picker-cell-inner container">
+          <div className="ant-picker-cell-inner">
             <div className="cell-container">
               <span className="dot">•</span>
               <span>{badgeText}</span>
@@ -261,46 +236,26 @@ export const CreateNote = (props: { width: number }) => {
       }
     }
     if (picker === 'date') {
-      switch (dayWorkStatus) {
-        case '休':
-          return (
-            <div className="ant-picker-cell-inner container">
-              <div className="restlabel">{dayWorkStatus}</div>
-              <div>
-                <span>{badgeText}</span>
-              </div>
-              <div className="cell-container">
-                <span>{chineseCalendarText}</span>
-              </div>
-            </div>
-          );
-        case '班':
-          return (
-            <div className="ant-picker-cell-inner container">
-              <div className="worklabel">{dayWorkStatus}</div>
-              <div>
-                <span>{badgeText}</span>
-              </div>
-              <div className="cell-container">
-                <span>{chineseCalendarText}</span>
-              </div>
-            </div>
-          );
-        case "":
-          return (
-            <div className="ant-picker-cell-inner container">
-              <div>{dayWorkStatus}</div>
-              <div>
-                <span>{badgeText}</span>
-              </div>
-              <div className="cell-container">
-                <span>{chineseCalendarText}</span>
-              </div>
-            </div>
-          );
-        default:
-          return <div className="ant-picker-cell-inner">{badgeText}</div>;
-      }
+      return (
+        <div className="ant-picker-cell-inner">
+          <div className="cell-container">
+            <span className="dot">•</span>
+            <span>{badgeText}</span>
+            <span>{chineseCalendarText}</span>
+            <span
+              className={
+                dayWorkStatus === "休"
+                  ? "restlabel"
+                  : dayWorkStatus === "班"
+                    ? "worklabel"
+                    : ""
+              }
+            >
+                {dayWorkStatus}
+              </span>
+          </div>
+        </div>
+      );
     } else {
       return <div className="ant-picker-cell-inner">{badgeText}</div>;
     }
