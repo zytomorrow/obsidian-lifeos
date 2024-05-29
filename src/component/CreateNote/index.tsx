@@ -193,11 +193,11 @@ export const CreateNote = (props: { width: number }) => {
         return (
           <div className="ant-picker-cell-inner"
                style={{
-                 height: picker == "date"? "80%" : "auto",
-                 width: picker == "date"? "80%" : "auto",}}>
+                 height: picker == "date"? "100%" : "auto",
+                 width: picker == "date"? "100%" : "auto",}}>
             <div className="cell-container">
               <span className="dot">•</span>
-              <span>{badgeText}</span>
+              <span style={{lineHeight: "initial", display: "block"}}>{badgeText}</span>
               {picker === "date" && <span className="chinesecal">{chineseCalendarText}</span>}
               {picker === "date" &&  <p
                   className="label"
@@ -224,11 +224,10 @@ export const CreateNote = (props: { width: number }) => {
               <span className="week-dot" style={{
                 right:
                   (document.querySelector('[id^="rc-tabs-"][id$="-panel-Weekly"] th')?.clientWidth ?? 0) +
-                  (document.querySelector('[id^="rc-tabs-"][id$="-panel-Weekly"] .ant-picker-cell-inner')?.clientWidth ?? 0) * 0.5
-                  + 'px' }}>
+                  (document.querySelector('[id^="rc-tabs-"][id$="-panel-Weekly"] .ant-picker-cell-inner')?.clientWidth ?? 0) + 'px' }}>
                 •
               </span>
-              <span>{badgeText}</span>
+              <span style={{lineHeight:"initial"}}>{badgeText}</span>
             </div>
           </div>
         );
@@ -237,10 +236,10 @@ export const CreateNote = (props: { width: number }) => {
     return (
       <div className="ant-picker-cell-inner"
            style={{
-             height: picker == "date"? "80%" : "auto",
-             width: picker == "date"? "80%" : "auto",}}>
+             height: picker == "date"? "100%" : "auto",
+             width: picker == "date"? "100%" : "auto",}}>
         <div className="cell-container">
-          <span>{badgeText}</span>
+          <span style={{lineHeight: "initial", display: "block"}}>{badgeText}</span>
           {picker === "date" && <span className="chinesecal">{chineseCalendarText}</span>}
           {picker === "date" &&  <p
               className="label"
