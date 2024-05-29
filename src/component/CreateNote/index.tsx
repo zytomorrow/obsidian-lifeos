@@ -192,91 +192,71 @@ export const CreateNote = (props: { width: number }) => {
       if (picker !== 'week') {
         return (
           <div className="ant-picker-cell-inner"
-               style={{height: picker === "date"? "100%;": "auto",
-                       width: picker === "date"? "100%;": "auto"}}
-          >
+               style={{
+                 height: picker == "date"? "80%" : "auto",
+                 width: picker == "date"? "80%" : "auto",}}>
             <div className="cell-container">
-              <p className="dot">•</p>
+              <span className="dot">•</span>
               <span>{badgeText}</span>
               {picker === "date" && <span className="chinesecal">{chineseCalendarText}</span>}
+              {picker === "date" &&  <p
+                  className="label"
+                  style={{
+                    backgroundColor:
+                      dayWorkStatus === "休"
+                        ? "#eb3333"
+                        : dayWorkStatus === "班"
+                          ? "#4E5877"
+                          : "white"}}
+              >
+                {dayWorkStatus}
+              </p>}
             </div>
           </div>
         );
       }
       
-      
-      // if (picker === 'date') {
-      //   return (
-      //     <div className="ant-picker-cell-inner">
-      //       <div className="cell-container">
-      //         <p className="dot">•</p>
-      //         <span>{badgeText}</span>
-      //         <span className="chinesecal">{chineseCalendarText}</span>
-      //         <p
-      //           className="label"
-      //           style={{
-      //             backgroundColor:
-      //               dayWorkStatus === "休"
-      //                 ? "#eb3333"
-      //                 : dayWorkStatus === "班"
-      //                   ? "#4E5877"
-      //                   : "white"}}
-      //         >
-      //           {dayWorkStatus}
-      //         </p>
-      //       </div>
-      //     </div>
-      //   );
-      // }
-      //
-      // if (picker !== 'week') {
-      //   return (
-      //     <div className="ant-picker-cell-inner"
-      //     >
-      //       <div className="cell-container">
-      //         <p className="dot">•</p>
-      //         <span>{badgeText}</span>
-      //       </div>
-      //     </div>
-      //   );
-      // }
 
       if (date.day() === 1) {
         return (
           <div className="ant-picker-cell-inner">
             <div className="cell-container">
-              <span className="week-dot">•</span>
+              <span className="week-dot" style={{
+                right:
+                  (document.querySelector('[id^="rc-tabs-"][id$="-panel-Weekly"] th')?.clientWidth ?? 0) +
+                  (document.querySelector('[id^="rc-tabs-"][id$="-panel-Weekly"] .ant-picker-cell-inner')?.clientWidth ?? 0) * 0.5
+                  + 'px' }}>
+                •
+              </span>
               <span>{badgeText}</span>
             </div>
           </div>
         );
       }
     }
-    // if (picker === 'date') {
-    //   return (
-    //     <div className="ant-picker-cell-inner">
-    //       <div className="cell-container">
-    //         <p className="dot"></p>
-    //         <span>{badgeText}</span>
-    //         <span className="chinesecal">{chineseCalendarText}</span>
-    //         <p
-    //           className="label"
-    //           style={{
-    //             backgroundColor:
-    //               dayWorkStatus === "休"
-    //                 ? "#eb3333"
-    //                 : dayWorkStatus === "班"
-    //                   ? "#4E5877"
-    //                   : "white"
-    //           }}
-    //         >
-    //           {dayWorkStatus}
-    //         </p>
-    //       </div>
-    //     </div>
-    //   );
-    // }
-    return <div className="ant-picker-cell-inner">{badgeText}</div>;
+    return (
+      <div className="ant-picker-cell-inner"
+           style={{
+             height: picker == "date"? "80%" : "auto",
+             width: picker == "date"? "80%" : "auto",}}>
+        <div className="cell-container">
+          <span>{badgeText}</span>
+          {picker === "date" && <span className="chinesecal">{chineseCalendarText}</span>}
+          {picker === "date" &&  <p
+              className="label"
+              style={{
+                backgroundColor:
+                  dayWorkStatus === "休"
+                    ? "#eb3333"
+                    : dayWorkStatus === "班"
+                      ? "#4E5877"
+                      : "white"}}
+          >
+            {dayWorkStatus}
+          </p>}
+        </div>
+      </div>
+    );
   };
   
   const createPARAFile = async (values: any) => {
@@ -335,7 +315,8 @@ export const CreateNote = (props: { width: number }) => {
 
     form.setFieldValue(`${item}Folder`, itemFolder);
     form.setFieldValue(`${item}Index`, itemIndex ? `${itemIndex}.md` : '');
-    form.validateFields([`${item}Folder`, `${item}Index`]);
+    form.validateFields([`${item}Folder`, `$main.js
+styles.css{item}Index`]);
   };
 
   return (
